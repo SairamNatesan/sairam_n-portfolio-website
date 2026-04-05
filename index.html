@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sairam</title>
+
+  <!-- icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+  <section id="hero">
+    <header>
+      <a class="header-logo">Sairam<span>.</span></a>
+        
+      <label class="main">
+        Menu
+        <input class="inp" checked="" type="checkbox" />
+        <div class="hamburger">
+          <svg viewBox="0 0 32 32">
+            <path
+              class="line line-top-bottom"
+              d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"
+            ></path>
+            <path class="line" d="M7 16 27 16"></path>
+          </svg>
+        </div>
+        <section class="menu-container">
+          <div class="menu-list"  onclick="window.location='designer.html'">About the Designer</div>
+          <div class="menu-list"  onclick="window.location='qaengineer.html'">About the QA Engineer</div>
+          <div class="menu-list">Portfolio</div>
+          <div class="menu-list">Contact</div>
+        </section>
+      </label>
+      
+      </header>
+
+
+    <div class="bg-layer">
+      <img class="hero-img" src="Hero Pic.png">
+      <video class="hero-video" src="Hero Pic-3.mp4" muted loop playsinline></video>
+      <video class="hero-video-2" src="Hero Pic-2.mp4" muted loop playsinline></video>
+    </div>
+
+
+    <div class="content">
+      <div class="left">
+        <h3>Hi,</h3>
+        <h1>I'm <span>Sairam</span></h1>
+        <div style="height: 100px;"></div>
+        <div class="cta-section">
+          <button class="cta-1" onclick="window.location='designer.html'">
+            The Designer <i class="fa-solid fa-brush"></i>
+          </button>
+          <button class="cta-2" onclick="window.location='qaengineer.html'">
+            The QA Engineer
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+       </div>
+        
+        <div class="social-section">
+          <i class="fa-brands fa-github"></i>
+          <i class="fa-brands fa-instagram"></i>
+          <i class="fa-brands fa-linkedin-in"></i>
+        </div>
+      </div>
+
+      
+
+      <div class="right">
+        <div class="img-wrap">
+          
+        </div>
+      </div>
+    </div>
+    
+
+    <script src="script.js"></script>
+    <script>
+      const cta1 = document.querySelector('.cta-1');
+      const h1 = document.querySelector('.content h1');
+      const h3 = document.querySelector('.content h3');
+
+      cta1.addEventListener('mouseenter', () => {
+        h1.style.color = 'white';
+        h3.style.color = 'white';
+      });
+
+      cta1.addEventListener('mouseleave', () => {
+        h1.style.color = '';
+        h3.style.color = '';
+      });
+    </script>
+  </section>
+
+</body>
+
+</html>
