@@ -1,103 +1,913 @@
 <!DOCTYPE html>
 <html lang="en">
-
+ 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sairam</title>
-
-  <!-- icons -->
+  <title>Sairam — The QA Engineer</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="styles.css">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600;700&family=Open+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+ 
+  <style>
+    *, *::before, *::after { padding: 0; margin: 0; outline: none; border: none; box-sizing: border-box; }
+ 
+    :root {
+      --ink:    #111111;
+      --paper:  #f5f2ed;
+      --red:    rgb(200, 30, 30);
+      --navy:   #1c1c1e;
+      --muted:  rgba(17,17,17,0.45);
+      /* Light section colors */
+      --ls-bg:      #f5f2ed;
+      --ls-bg-alt:  #edeae4;
+      --ls-text:    #111111;
+      --ls-muted:   rgba(17,17,17,0.5);
+      --ls-border:  rgba(17,17,17,0.1);
+      --ls-card:    rgba(17,17,17,0.04);
+      --ls-card-border: rgba(17,17,17,0.09);
+    }
+ 
+    html { scroll-behavior: smooth; }
+    body { background-color: rgb(253, 253, 252); }
+ 
+    #hero { background-color: rgb(253, 253, 252); }
+ 
+    .header-logo        { color: var(--ink); }
+    .content h1         { color: var(--ink); }
+    .content h3         { color: var(--ink); }
+    h1 span             { color: var(--red); }
+    .header-logo span   { color: var(--red); }
+    .nav-item           { color: var(--ink); }
+    .nav-item:hover     { color: var(--red); }
+    .social-section i   { border-color: var(--ink); color: var(--ink); background-color: transparent; }
+    .cta-2              { color: var(--ink); border: 2px solid var(--ink); }
+    .content p          { color: rgba(17,17,17,0.5); }
+ 
+    /* ── HERO ── */
+    #hero-qa {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+      background-color: rgb(253, 253, 252);
+    }
+    #hero-qa::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(200,30,30,0.04) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(200,30,30,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    #hero-qa::after {
+      content: '';
+      position: absolute;
+      width: 700px; height: 700px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,30,30,0.05) 0%, transparent 65%);
+      top: -200px; left: -100px;
+      pointer-events: none; z-index: 0;
+    }
+ 
+    .bg-layer-qa { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+ 
+    /* IMAGE: pinned to left side */
+    .hero-img-qa {
+      position: absolute;
+      bottom: 0;
+      left: 3%;
+      height: 100vh;
+      width: auto;
+      object-fit: cover;
+      z-index: 1;
+      opacity: 0;
+      animation: slideInFromLeft 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+    }
+ 
+    /* Header */
+    header {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 30px 10%;
+      opacity: 0;
+      animation: topIn 1.4s ease-in-out 0.2s forwards;
+    }
+ 
+    .header-logo-qa {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .header-logo-qa span {
+      font-size: 64px;
+      color: var(--red);
+      line-height: 0.2;
+    }
+ 
+    .main > .inp { display: none; }
+    .main {
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 650;
+      font-size: 16px;
+      color: rgb(253, 253, 252);
+      background-color: var(--red);
+      padding: 3px 15px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      height: 2.5rem;
+      width: 12rem;
+      position: relative;
+      cursor: pointer;
+      justify-content: space-between;
+    }
+    .hamburger { display: flex; align-items: center; width: 35px; height: 35px; cursor: pointer; }
+    .hamburger svg { height: 100%; width: 100%; transition: transform 600ms cubic-bezier(0.4,0,0.2,1); }
+    .line { fill: none; stroke: rgb(253, 253, 252); stroke-linecap: round; stroke-linejoin: round; stroke-width: 3; transition: stroke-dasharray 600ms cubic-bezier(0.4,0,0.2,1), stroke-dashoffset 600ms cubic-bezier(0.4,0,0.2,1); }
+    .line-top-bottom { stroke-dasharray: 12 63; }
+    .inp:not(:checked) + .hamburger svg { transform: rotate(-45deg); }
+    .inp:not(:checked) + .hamburger svg .line-top-bottom { stroke-dasharray: 20 300; stroke-dashoffset: -32.42; }
+    .menu-container {
+      background-color: rgb(253, 253, 252);
+      color: var(--red);
+      border-radius: 10px;
+      position: absolute;
+      width: 100%;
+      left: 0;
+      top: 130%;
+      overflow: hidden;
+      clip-path: inset(0% 0% 0% 0% round 10px);
+      transition: all 0.4s;
+      z-index: 100;
+    }
+    .menu-list {
+      --delay: 0.2s; --trdelay: 0.15s;
+      padding: 8px 10px;
+      transition: background-color 0.2s;
+      position: relative;
+      transform: translateY(30px);
+      opacity: 0;
+      cursor: pointer;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 15px;
+    }
+    .menu-list::after {
+      content: "";
+      position: absolute;
+      top: 100%; left: 50%;
+      transform: translateX(-50%);
+      height: 1px;
+      background-color: rgba(0,0,0,0.1);
+      width: 95%;
+    }
+    .menu-list:hover { background-color: rgb(223,223,223); }
+    .inp:checked ~ .menu-container { clip-path: inset(10% 50% 90% 50% round 10px); }
+    .inp:not(:checked) ~ .menu-container .menu-list { transform: translateY(0); opacity: 1; }
+    .inp:not(:checked) ~ .menu-container .menu-list:nth-child(1) { transition: transform 0.2s var(--delay), opacity 0.2s var(--delay); }
+    .inp:not(:checked) ~ .menu-container .menu-list:nth-child(2) { transition: transform 0.2s calc(var(--delay) + var(--trdelay)*1), opacity 0.2s calc(var(--delay) + var(--trdelay)*1); }
+    .inp:not(:checked) ~ .menu-container .menu-list:nth-child(3) { transition: transform 0.2s calc(var(--delay) + var(--trdelay)*2), opacity 0.2s calc(var(--delay) + var(--trdelay)*2); }
+    .inp:not(:checked) ~ .menu-container .menu-list:nth-child(4) { transition: transform 0.2s calc(var(--delay) + var(--trdelay)*3), opacity 0.2s calc(var(--delay) + var(--trdelay)*3); }
+ 
+    /* ── HERO CONTENT ── */
+    /* Removed margin-left:auto — content now sits centered-right, closer to the image */
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 10%;
+      height: calc(100vh - 100px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+      max-width: 780px;
+      margin-left: 52%;
+    }
+ 
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(200,30,30,0.08);
+      border: 1px solid rgba(200,30,30,0.2);
+      color: var(--red);
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      padding: 6px 14px;
+      border-radius: 4px;
+      width: fit-content;
+      opacity: 0;
+      animation: bottomIn 1.4s ease-in-out 0.2s forwards;
+    }
+    .hero-tag::before {
+      content: '';
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      animation: blink 1.2s infinite;
+    }
+ 
+    .hero-h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      line-height: 1.05;
+      color: var(--ink);
+      opacity: 0;
+      animation: bottomIn 1.4s ease-in-out 0.3s forwards;
+    }
+    .hero-h1 span { color: var(--red); }
+ 
+    .hero-p {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--muted);
+      max-width: 420px;
+      opacity: 0;
+      animation: bottomIn 1.4s ease-in-out 0.4s forwards;
+    }
+ 
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      opacity: 0;
+      animation: bottomIn 1.4s ease-in-out 0.45s forwards;
+    }
+    .stat-item { display: flex; flex-direction: column; gap: 2px; }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      color: var(--red);
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+ 
+    .hero-cta {
+      opacity: 0;
+      animation: bottomIn 1.4s ease-in-out 0.5s forwards;
+    }
+    .hero-btn {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: var(--red);
+      color: rgb(253, 253, 252);
+      height: 50px;
+      padding: 0 32px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+      border: 2px solid var(--red);
+    }
+    .hero-btn:hover { background: transparent; color: var(--red); }
+ 
+    .hero-socials {
+      display: flex;
+      gap: 14px;
+      opacity: 0;
+      animation: bottomIn 1.4s ease-in-out 0.6s forwards;
+    }
+    .hero-socials i {
+      font-size: 14px;
+      border: 1px solid rgba(17,17,17,0.2);
+      display: flex; align-items: center; justify-content: center;
+      height: 20px; width: 20px;
+      padding: 8px;
+      border-radius: 50%;
+      color: var(--muted);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .hero-socials i:hover { color: var(--red); border-color: var(--red); transform: scale(1.1); }
+ 
+    /* ── SHARED SECTION — NOW LIGHT ── */
+    .qa-section { padding: 100px 10%; position: relative; overflow: hidden; }
+    .qa-section-dark  { background: var(--ls-bg); }
+    .qa-section-black { background: var(--ls-bg-alt); }
+    .qa-section::before {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,30,30,0.04) 0%, transparent 70%);
+      bottom: -200px; left: -100px;
+      pointer-events: none;
+    }
+ 
+    .qa-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 4px;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: block;
+    }
+ 
+    .qa-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      color: var(--ls-text);
+      line-height: 1;
+      margin-bottom: 60px;
+    }
+    .qa-heading span { color: var(--red); }
+ 
+    /* ── SECTION 2: SKILLS ── */
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .skill-card {
+      background: var(--ls-card);
+      border: 1px solid var(--ls-card-border);
+      border-radius: 16px; padding: 32px;
+      display: flex; flex-direction: column; gap: 16px;
+      transition: all 0.35s ease; position: relative; overflow: hidden;
+    }
+    .skill-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--red), transparent);
+      transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
+    }
+    .skill-card:hover { border-color: rgba(200,30,30,0.25); transform: translateY(-4px); }
+    .skill-card:hover::before { transform: scaleX(1); }
+    .skill-card-icon {
+      width: 52px; height: 52px; border-radius: 12px;
+      background: rgba(200,30,30,0.08); border: 1px solid rgba(200,30,30,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; color: var(--red);
+    }
+    .skill-card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      color: var(--ls-text);
+      letter-spacing: 1.5px;
+    }
+    .skill-card-desc {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.88rem;
+      color: var(--ls-muted);
+      line-height: 1.7;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+    .skill-tag {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.65rem; letter-spacing: 1px;
+      color: var(--red);
+      border: 1px solid rgba(200,30,30,0.3);
+      padding: 3px 10px; border-radius: 4px;
+      background: rgba(200,30,30,0.05);
+    }
+ 
+    /* ── SECTION 3: TOOLS ── */
+    .tools-terminal {
+      background: rgba(17,17,17,0.03);
+      border: 1px solid var(--ls-card-border);
+      border-radius: 16px; overflow: hidden;
+    }
+    .terminal-bar {
+      background: rgba(17,17,17,0.06);
+      padding: 12px 20px;
+      display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid var(--ls-card-border);
+    }
+    .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .t-red { background: #ff5f57; } .t-amber { background: #febc2e; } .t-green { background: #28c840; }
+    .terminal-title {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.75rem;
+      color: var(--ls-muted);
+      margin-left: 8px;
+      letter-spacing: 1px;
+    }
+    .terminal-body { padding: 32px; }
+    .tools-qa-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+    .tool-qa-item {
+      background: rgba(200,30,30,0.03);
+      border: 1px solid var(--ls-card-border);
+      border-radius: 12px; padding: 24px 16px;
+      text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      transition: all 0.3s ease; position: relative; overflow: hidden;
+    }
+    .tool-qa-item:hover {
+      border-color: rgba(200,30,30,0.3);
+      background: rgba(200,30,30,0.06);
+      transform: translateY(-4px);
+    }
+    .tool-qa-icon {
+      font-size: 1.6rem; width: 50px; height: 50px;
+      background: rgba(200,30,30,0.08); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--red);
+    }
+    .tool-qa-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.25rem;
+      color: var(--ls-text);
+      letter-spacing: 1.8px;
+    }
+    .tool-qa-type {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.65rem;
+      color: var(--ls-muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .tool-qa-badge {
+      position: absolute; top: 10px; right: 10px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.55rem; letter-spacing: 1px;
+      background: rgba(200,30,30,0.12); color: var(--red);
+      padding: 2px 6px; border-radius: 3px; text-transform: uppercase;
+    }
+ 
+    /* ── SECTION 4: EXPERIENCE ── */
+    .exp-layout { display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px; align-items: start; }
+    .exp-timeline { display: flex; flex-direction: column; }
+    .exp-item { display: flex; gap: 20px; padding-bottom: 40px; position: relative; }
+    .exp-item:not(:last-child)::before {
+      content: '';
+      position: absolute; left: 19px; top: 40px; bottom: 0;
+      width: 1px; background: var(--ls-card-border);
+    }
+    .exp-dot-wrap { flex-shrink: 0; }
+    .exp-dot {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 2px solid var(--red);
+      background: rgba(200,30,30,0.06);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--red); font-size: 0.9rem; flex-shrink: 0;
+    }
+    .exp-body { flex: 1; padding-top: 6px; }
+    .exp-period {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.7rem; color: var(--red);
+      letter-spacing: 2px; text-transform: uppercase;
+      margin-bottom: 6px; display: block;
+    }
+    .exp-role {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem; color: var(--ls-text);
+      margin-bottom: 4px;
+    }
+    .exp-company {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.85rem; color: var(--ls-muted);
+      margin-bottom: 10px;
+    }
+    .exp-desc {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.88rem; color: var(--ls-muted); line-height: 1.7;
+    }
+ 
+    .exp-project-card {
+      background: var(--ls-card);
+      border: 1px solid var(--ls-card-border);
+      border-radius: 20px; padding: 40px;
+      position: sticky; top: 40px;
+    }
+    .proj-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(200,30,30,0.08); border: 1px solid rgba(200,30,30,0.2);
+      color: var(--red);
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.7rem; letter-spacing: 2px;
+      padding: 5px 14px; border-radius: 4px;
+      margin-bottom: 20px; text-transform: uppercase;
+    }
+    .proj-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem; color: var(--ls-text);
+      line-height: 1.15; margin-bottom: 14px;
+    }
+    .proj-desc {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.9rem; color: var(--ls-muted);
+      line-height: 1.75; margin-bottom: 24px;
+    }
+    .proj-divider { height: 1px; background: var(--ls-card-border); margin-bottom: 24px; }
+    .proj-stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+    .proj-stat {
+      background: rgba(200,30,30,0.04);
+      border: 1px solid rgba(200,30,30,0.15);
+      border-radius: 10px; padding: 16px;
+    }
+    .proj-stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem; color: var(--red); line-height: 1;
+    }
+    .proj-stat-label {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.65rem; color: var(--ls-muted);
+      letter-spacing: 1px; text-transform: uppercase; margin-top: 4px;
+    }
+    .proj-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .proj-tag {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.65rem; letter-spacing: 1px;
+      color: var(--red); border: 1px solid rgba(200,30,30,0.3);
+      padding: 4px 12px; border-radius: 4px;
+      background: rgba(200,30,30,0.05);
+    }
+ 
+    /* ── SECTION 5: PUBLICATION ── */
+    .pub-card-qa {
+      background: var(--ls-card);
+      border: 1px solid var(--ls-card-border);
+      border-radius: 20px; padding: 48px;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 40px; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .pub-card-qa::after {
+      content: 'IEEE';
+      position: absolute; right: -10px; bottom: -20px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 9rem; color: rgba(200,30,30,0.05);
+      pointer-events: none; line-height: 1;
+    }
+    .pub-badge-qa {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(200,30,30,0.08); border: 1px solid rgba(200,30,30,0.25);
+      color: var(--red);
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; padding: 5px 14px;
+      border-radius: 100px; margin-bottom: 20px;
+    }
+    .pub-title-qa {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+      color: var(--ls-text); line-height: 1.15; margin-bottom: 16px;
+    }
+    .pub-desc-qa {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.9rem; color: var(--ls-muted);
+      line-height: 1.75; max-width: 540px; margin-bottom: 28px;
+    }
+    .pub-link-qa {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--red); color: rgb(253, 253, 252);
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.85rem; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; text-decoration: none;
+      padding: 14px 28px; border-radius: 100px;
+      transition: 0.3s; border: 2px solid var(--red);
+    }
+    .pub-link-qa:hover { background: transparent; color: var(--red); }
+    .pub-qr-wrap-qa { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .pub-qr-qa {
+      width: 130px; height: 130px; background: rgb(253, 253, 252);
+      border-radius: 12px; border: 1px solid var(--ls-card-border);
+      display: flex; align-items: center;
+      justify-content: center; padding: 10px; flex-shrink: 0;
+    }
+    .pub-qr-qa img { width: 100%; height: 100%; object-fit: contain; }
+    .pub-qr-label-qa {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.65rem; color: var(--ls-muted);
+      text-align: center; letter-spacing: 1px;
+    }
+ 
+    /* ── SECTION 6: CTA — stays dark as accent section ── */
+    #s6-qa-cta {
+      background: #111111;
+      text-align: center;
+      padding: 120px 10%;
+      position: relative; overflow: hidden;
+    }
+    #s6-qa-cta::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(200,30,30,0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(200,30,30,0.03) 1px, transparent 1px);
+      background-size: 60px 60px; pointer-events: none;
+    }
+    .cta-qa-big {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 9vw, 7.5rem);
+      color: #f5f2ed; line-height: 1; margin-bottom: 20px; position: relative;
+    }
+    .cta-qa-big span { color: transparent; -webkit-text-stroke: 2px var(--red); }
+    .cta-qa-sub {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 1rem; color: rgba(245,242,237,0.4);
+      margin-bottom: 50px; position: relative;
+    }
+    .cta-qa-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 60px; position: relative; }
+    .cta-qa-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--red); color: rgb(253, 253, 252);
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.9rem; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; text-decoration: none;
+      padding: 16px 36px; border-radius: 100px;
+      transition: 0.3s; border: 2px solid var(--red);
+    }
+    .cta-qa-primary:hover { background: transparent; color: var(--red); }
+    .cta-qa-secondary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: transparent; color: #f5f2ed;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.9rem; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; text-decoration: none;
+      padding: 16px 36px; border-radius: 100px;
+      transition: 0.3s; border: 2px solid rgba(255,255,255,0.15);
+    }
+    .cta-qa-secondary:hover { border-color: #f5f2ed; }
+    .cta-qa-divider { width: 1px; height: 60px; background: rgba(255,255,255,0.1); margin: 0 auto 40px; position: relative; }
+    .cta-qa-contacts { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; position: relative; }
+    .cta-qa-contact {
+      display: flex; align-items: center; gap: 10px;
+      color: rgba(245,242,237,0.45);
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.85rem; text-decoration: none; transition: color 0.3s;
+    }
+    .cta-qa-contact:hover { color: var(--red); }
+    .cta-qa-contact i {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; transition: all 0.3s;
+    }
+    .cta-qa-contact:hover i { border-color: var(--red); color: var(--red); }
+    .footer-qa {
+      margin-top: 80px; padding-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.75rem; color: rgba(245,242,237,0.15); position: relative;
+    }
+ 
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; } .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; } .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; } .reveal-delay-6 { transition-delay: 0.6s; }
+ 
+    @keyframes topIn { from { transform: translateY(-100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes bottomIn { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes slideInFromLeft { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+ 
+    @media (max-width: 900px) {
+      .exp-layout { grid-template-columns: 1fr; }
+      .exp-project-card { position: static; }
+      .hero-img-qa { height: 60vh; opacity: 0.15; }
+      .hero-content { margin-left: 0; padding: 0 5%; }
+    }
+    @media (max-width: 768px) {
+      .qa-section { padding: 60px 5%; }
+      header { padding: 20px 5%; }
+      .hero-content { padding: 0 5%; margin-left: 0; }
+      .pub-card-qa { grid-template-columns: 1fr; }
+      .pub-qr-wrap-qa { display: none; }
+      #s6-qa-cta { padding: 80px 5%; }
+      .hero-stats { gap: 20px; }
+    }
+  </style>
 </head>
-
+ 
 <body>
-  <section id="hero">
+ 
+  <!-- HERO -->
+  <section id="hero-qa">
+    <div class="bg-layer-qa">
+      <img class="hero-img-qa" src="Hero-Pic-2.png" alt="Sairam QA">
+    </div>
+ 
     <header>
-      <a class="header-logo">Sairam<span>.</span></a>
-        
+      <a class="header-logo-qa" href="index.html">Sairam<span>.</span></a>
       <label class="main">
         Menu
-        <input class="inp" checked="" type="checkbox" />
+        <input class="inp" checked type="checkbox" />
         <div class="hamburger">
           <svg viewBox="0 0 32 32">
-            <path
-              class="line line-top-bottom"
-              d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"
-            ></path>
+            <path class="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"></path>
             <path class="line" d="M7 16 27 16"></path>
           </svg>
         </div>
         <section class="menu-container">
-          <div class="menu-list">Home</div>
-          <div class="menu-list"  onclick="window.location='designer.html'">About the Designer</div>
-          <div class="menu-list">Portfolio</div>
-          <div class="menu-list">Contact</div>
+          <div class="menu-list" onclick="window.location='index.html'">Home</div>
+          <div class="menu-list" onclick="window.location='designer.html'">The Designer</div>
+          <div class="menu-list" onclick="window.location='portfolio.html'">Portfolio</div>
+          <div class="menu-list" onclick="window.location='social.html'">Contact</div>
         </section>
       </label>
-      
-      </header>
-
-
-    <div class="bg-layer">
-      <img class="hero-img" src="Hero Pic.png">
-      <video class="hero-video" src="Hero Pic-3.mp4" muted loop playsinline></video>
-      <video class="hero-video-2" src="Hero Pic-2.mp4" muted loop playsinline></video>
-    </div>
-
-
-    <div class="content">
-      <div class="left">
-        <h3>Hi,</h3>
-        <h1>I'm <span>Sairam</span></h1>
-        <div style="height: 100px;"></div>
-        <div class="cta-section">
-          <button class="cta-1" onclick="window.location='designer.html'">
-            The Designer <i class="fa-solid fa-brush"></i>
-          </button>
-          <button class="cta-2">The QA Engineer
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
-       </div>
-        
-        <div class="social-section">
-          <i class="fa-brands fa-github"></i>
-          <i class="fa-brands fa-instagram"></i>
-          <i class="fa-brands fa-linkedin-in"></i>
-        </div>
-      </div>
-
-      
-
-      <div class="right">
-        <div class="img-wrap">
-          
-        </div>
+    </header>
+ 
+    <div class="hero-content">
+      <span class="hero-tag">TCS · BFSI Domain · 1.5 Years</span>
+      <h1 class="hero-h1">Breaking Software<br>Before <span>Users Do</span></h1>
+      <p class="hero-p">QA Engineer at Tata Consultancy Services — specialized in BFSI domain testing, API validation via Hoppscotch, SQL data verification, and log analysis.</p>
+      <div class="hero-stats">
+        <div class="stat-item"><span class="stat-num">1.5</span><span class="stat-label">Yrs at TCS</span></div>
+        <div class="stat-item"><span class="stat-num">BFSI</span><span class="stat-label">Domain</span></div>
+        <div class="stat-item"><span class="stat-num">IEEE</span><span class="stat-label">Published</span></div>
       </div>
     </div>
-    
-
-    <script src="script.js"></script>
-    <script>
-      const cta1 = document.querySelector('.cta-1');
-      const h1 = document.querySelector('.content h1');
-      const h3 = document.querySelector('.content h3');
-
-      cta1.addEventListener('mouseenter', () => {
-        h1.style.color = 'white';
-        h3.style.color = 'white';
-      });
-
-      cta1.addEventListener('mouseleave', () => {
-        h1.style.color = '';
-        h3.style.color = '';
-      });
-    </script>
   </section>
-
+ 
+  <!-- SECTION 2 — SKILLS -->
+  <section class="qa-section qa-section-dark" id="s2-skills">
+    <span class="qa-label reveal">Expertise</span>
+    <h2 class="qa-heading reveal">What I <span>Test</span></h2>
+    <div class="skills-grid">
+ 
+      <div class="skill-card reveal reveal-delay-1">
+        <div class="skill-card-icon"><i class="fas fa-flask"></i></div>
+        <h3 class="skill-card-title">BFSI Domain Testing</h3>
+        <p class="skill-card-desc">Deep understanding of Banking, Financial Services & Insurance workflows — validating transactions, account operations, loan processing, and compliance-critical business logic that must work flawlessly.</p>
+        <div class="skill-tags"><span class="skill-tag">Banking Logic</span><span class="skill-tag">Transactions</span><span class="skill-tag">Compliance</span><span class="skill-tag">Insurance</span></div>
+      </div>
+ 
+      <div class="skill-card reveal reveal-delay-2">
+        <div class="skill-card-icon"><i class="fa-solid fa-plug"></i></div>
+        <h3 class="skill-card-title">API Testing — Hoppscotch</h3>
+        <p class="skill-card-desc">End-to-end REST API validation using Hoppscotch — verifying request/response payloads, status codes, headers, authentication flows, and edge-case scenarios specific to financial APIs.</p>
+        <div class="skill-tags"><span class="skill-tag">Hoppscotch</span><span class="skill-tag">REST APIs</span><span class="skill-tag">JSON</span><span class="skill-tag">Auth Flows</span></div>
+      </div>
+ 
+      <div class="skill-card reveal reveal-delay-3">
+        <div class="skill-card-icon"><i class="fa-solid fa-database"></i></div>
+        <h3 class="skill-card-title">SQL & Data Verification</h3>
+        <p class="skill-card-desc">Writing SQL queries to validate backend data integrity — cross-checking UI outputs against database records, verifying data transformations, and detecting inconsistencies after financial transactions.</p>
+        <div class="skill-tags"><span class="skill-tag">SQL</span><span class="skill-tag">Data Integrity</span><span class="skill-tag">DB Validation</span><span class="skill-tag">Queries</span></div>
+      </div>
+ 
+      <div class="skill-card reveal reveal-delay-4">
+        <div class="skill-card-icon"><i class="fa-solid fa-terminal"></i></div>
+        <h3 class="skill-card-title">Log Retrieval & Analysis</h3>
+        <p class="skill-card-desc">Retrieving and parsing application logs to trace errors, debug failures, and identify root causes — especially critical in BFSI where silent failures can have serious financial and regulatory impact.</p>
+        <div class="skill-tags"><span class="skill-tag">Log Retrieval</span><span class="skill-tag">Error Tracing</span><span class="skill-tag">Root Cause</span><span class="skill-tag">Debugging</span></div>
+      </div>
+ 
+      <div class="skill-card reveal reveal-delay-1">
+        <div class="skill-card-icon"><i class="fa-solid fa-list-check"></i></div>
+        <h3 class="skill-card-title">Manual & Functional Testing</h3>
+        <p class="skill-card-desc">Designing and executing detailed test cases, test plans, and regression suites — ensuring full functional coverage across positive, negative, and boundary value scenarios for BFSI applications.</p>
+        <div class="skill-tags"><span class="skill-tag">Test Cases</span><span class="skill-tag">Regression</span><span class="skill-tag">Smoke Testing</span><span class="skill-tag">UAT</span></div>
+      </div>
+ 
+      <div class="skill-card reveal reveal-delay-2">
+        <div class="skill-card-icon"><i class="fas fa-shield-alt"></i></div>
+        <h3 class="skill-card-title">BFSI Compliance Awareness</h3>
+        <p class="skill-card-desc">Familiar with regulatory requirements in the financial sector — testing for audit trails, data privacy, and security standards expected in banking and insurance software at an enterprise level.</p>
+        <div class="skill-tags"><span class="skill-tag">Audit Trails</span><span class="skill-tag">Data Privacy</span><span class="skill-tag">Security</span><span class="skill-tag">Regulatory</span></div>
+      </div>
+ 
+    </div>
+  </section>
+ 
+  <!-- SECTION 3 — TOOLS -->
+  <section class="qa-section qa-section-black" id="s3-tools">
+    <span class="qa-label reveal">Stack</span>
+    <h2 class="qa-heading reveal">Tools I <span>Use</span></h2>
+    <div class="tools-terminal reveal">
+      <div class="terminal-bar">
+        <span class="terminal-dot t-red"></span>
+        <span class="terminal-dot t-amber"></span>
+        <span class="terminal-dot t-green"></span>
+        <span class="terminal-title">sairam@tcs:~ $ tools --list --domain=BFSI</span>
+      </div>
+      <div class="terminal-body">
+        <div class="tools-qa-grid">
+          <div class="tool-qa-item"><span class="tool-qa-badge">Primary</span><div class="tool-qa-icon"><i class="fa-solid fa-plug"></i></div><span class="tool-qa-name">Hoppscotch</span><span class="tool-qa-type">API Testing</span></div>
+          <div class="tool-qa-item"><span class="tool-qa-badge">Primary</span><div class="tool-qa-icon"><i class="fa-solid fa-database"></i></div><span class="tool-qa-name">SQL</span><span class="tool-qa-type">DB Queries</span></div>
+          <div class="tool-qa-item"><div class="tool-qa-icon"><i class="fa-solid fa-terminal"></i></div><span class="tool-qa-name">Log Analysis</span><span class="tool-qa-type">Debugging</span></div>
+          <div class="tool-qa-item"><div class="tool-qa-icon"><i class="fa-solid fa-list-check"></i></div><span class="tool-qa-name">Test Cases</span><span class="tool-qa-type">Manual QA</span></div>
+          <div class="tool-qa-item"><div class="tool-qa-icon"><i class="fas fa-money-check"></i></div><span class="tool-qa-name">BFSI Domain</span><span class="tool-qa-type">Specialization</span></div>
+          <div class="tool-qa-item"><div class="tool-qa-icon"><i class="fa-solid fa-code"></i></div><span class="tool-qa-name">VS Code</span><span class="tool-qa-type">Editor</span></div>
+          <div class="tool-qa-item"><div class="tool-qa-icon"><i class="fa-solid fa-brain"></i></div><span class="tool-qa-name">AI / ML</span><span class="tool-qa-type">IEEE Research</span></div>
+          <div class="tool-qa-item"><div class="tool-qa-icon"><i class="fa-regular fa-file-lines"></i></div><span class="tool-qa-name">MS Office</span><span class="tool-qa-type">Reporting</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- SECTION 4 — EXPERIENCE -->
+  <section class="qa-section qa-section-dark" id="s4-experience">
+    <span class="qa-label reveal">Track Record</span>
+    <h2 class="qa-heading reveal">Experience & <span>Projects</span></h2>
+    <div class="exp-layout">
+      <div class="exp-timeline">
+ 
+        <div class="exp-item reveal">
+          <div class="exp-dot-wrap"><div class="exp-dot"><i class="fa-solid fa-briefcase"></i></div></div>
+          <div class="exp-body">
+            <span class="exp-period">Mar 2024 – Present</span>
+            <h3 class="exp-role">QA Engineer</h3>
+            <p class="exp-company">Tata Consultancy Services (TCS) · BFSI Domain</p>
+            <p class="exp-desc">Working on software quality assurance for a BFSI-domain application — executing manual test cases, validating REST APIs via Hoppscotch, verifying data integrity using SQL, and retrieving logs to trace and report defects with precision.</p>
+          </div>
+        </div>
+ 
+        <div class="exp-item reveal">
+          <div class="exp-dot-wrap"><div class="exp-dot"><i class="fa-solid fa-microchip"></i></div></div>
+          <div class="exp-body">
+            <span class="exp-period">Mar 2023 – May 2023</span>
+            <h3 class="exp-role">Engineer Intern</h3>
+            <p class="exp-company">Emertxe Information Technologies</p>
+            <p class="exp-desc">Foundational programming in C and Micro-Controllers. SDLC-based project building in IoT — gaining hands-on experience with embedded systems and structured software development lifecycle methodology.</p>
+          </div>
+        </div>
+ 
+        <div class="exp-item reveal">
+          <div class="exp-dot-wrap"><div class="exp-dot"><i class="fa-solid fa-graduation-cap"></i></div></div>
+          <div class="exp-body">
+            <span class="exp-period">2020 – 2024</span>
+            <h3 class="exp-role">B.E. Electronics & Communication</h3>
+            <p class="exp-company">Saveetha Engineering College · CGPA 7.66</p>
+            <p class="exp-desc">IETE member. Published AI research on IEEE Xplore. Completed 4 Google UX certifications alongside ECE coursework — building a foundation in both hardware and software quality thinking.</p>
+          </div>
+        </div>
+ 
+      </div>
+ 
+      <div class="exp-project-card reveal">
+        <span class="proj-badge"><i class="fa-solid fa-circle" style="font-size:6px"></i> IEEE Published · 2024</span>
+        <h3 class="proj-title">Smart Attendance Registration System through AI</h3>
+        <p class="proj-desc">A deep learning approach using a custom SIANN architecture for automated facial-recognition attendance — the system's accuracy and loss function benchmarks reflect a QA engineer's mindset applied to validating AI model reliability.</p>
+        <div class="proj-divider"></div>
+        <div class="proj-stat-row">
+          <div class="proj-stat"><div class="proj-stat-num">CNN</div><div class="proj-stat-label">Base architecture</div></div>
+          <div class="proj-stat"><div class="proj-stat-num">SIANN</div><div class="proj-stat-label">Custom model</div></div>
+        </div>
+        <div class="proj-tags">
+          <span class="proj-tag">AI / ML</span>
+          <span class="proj-tag">Deep Learning</span>
+          <span class="proj-tag">IEEE</span>
+          <span class="proj-tag">Quality Metrics</span>
+          <span class="proj-tag">Python</span>
+        </div>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- SECTION 5 — PUBLICATION -->
+  <section class="qa-section qa-section-black" id="s5-pub">
+    <span class="qa-label reveal">Research</span>
+    <h2 class="qa-heading reveal">Published <span>Work</span></h2>
+    <div class="pub-card-qa reveal">
+      <div>
+        <span class="pub-badge-qa"><i class="fa-solid fa-circle" style="font-size:6px"></i> IEEE Xplore · 2024</span>
+        <h3 class="pub-title-qa">Smart Attendance Registration and Management System through AI</h3>
+        <p class="pub-desc-qa">A novel deep learning approach modifying CNN architecture with a Split Invariant Artificial Neural Network (SIANN) for efficient, automated attendance management — validated through accuracy and loss benchmarks, reflecting a QA engineer's approach to measuring and ensuring system reliability.</p>
+        <a href="https://ieeexplore.ieee.org/document/10404725" target="_blank" class="pub-link-qa">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          Read on IEEE Xplore
+        </a>
+      </div>
+      <div class="pub-qr-wrap-qa">
+        <div class="pub-qr-qa">
+          <img src="paper-qr.png" alt="QR Code" onerror="this.parentElement.style.background='#e8e4de'">
+        </div>
+        <p class="pub-qr-label-qa">Scan to read paper</p>
+      </div>
+    </div>
+  </section>
+ 
+  <!-- SECTION 6 — CTA -->
+  <section id="s6-qa-cta">
+    <span class="qa-label reveal" style="display:block;text-align:center;margin-bottom:12px">Let's Connect</span>
+    <h2 class="cta-qa-big reveal">Need a <span>Tester?</span></h2>
+    <p class="cta-qa-sub reveal">Open to QA roles, BFSI testing opportunities, and quality-first engineering teams.</p>
+    <div class="cta-qa-buttons reveal">
+      <a href="Sairam N_Resume.pdf" download class="cta-qa-primary"><i class="fa-solid fa-download"></i>Download CV</a>
+      <a href="mailto:sairam20222@gmail.com" class="cta-qa-secondary"><i class="fa-solid fa-envelope"></i>Send an Email</a>
+    </div>
+    <div class="cta-qa-divider"></div>
+    <div class="cta-qa-contacts reveal">
+      <a href="mailto:sairam20222@gmail.com" class="cta-qa-contact"><i class="fa-solid fa-envelope"></i>sairam20222@gmail.com</a>
+      <a href="tel:+919840439040" class="cta-qa-contact"><i class="fa-solid fa-phone"></i>+91 98404 39040</a>
+      <a href="https://linkedin.com" target="_blank" class="cta-qa-contact"><i class="fa-brands fa-linkedin-in"></i>LinkedIn</a>
+      <a href="https://github.com" target="_blank" class="cta-qa-contact"><i class="fa-brands fa-github"></i>GitHub</a>
+    </div>
+    <p class="footer-qa reveal">© 2026 N. Sairam · QA Engineer · TCS · BFSI Domain</p>
+  </section>
+ 
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+ 
 </body>
-
 </html>
